@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/* eslint-disable no-unused-vars */
+import React, {useState} from "react"
+import Header from "./Components/Header"
+import Search from "./Components/Search"
+import Form from "./Components/TransactionForm"
+import Table from "./Components/Transactions"
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [transactions, setTransactions] = useState([
+    { date: '2019-12-01', description: "Paycheck from Bob's Burger", category: 'Income', amount: 1000 },
+    { date: '2019-12-01', description: 'South bySouthwest Quinoa Bowl at Fresh and Go', category: 'Food', amount: -10.55 },
+    { date: '2019-12-02', description: 'South bySouthwest Quinoa Bowl at Fresh and Go', category: 'Food', amount: -10.55 },
+    { date: '2019-12-04', description: 'Sunglasses, Urban Outfitters', category: 'Fashion', amount: -24.99 },
+    { date: '2019-12-06', description: 'Venmo,Alice Pays you for Burrito', category: 'Food', amount: 8.75 },
+    { date: '2019-12-06', description: 'Chipotle', category: 'Food', amount: -17.59 }
+  ])
+  const [searchTerm, setSearchTerm] = useState("")
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+  function handleSearch(e) {
+    setSearchTerm(e.target.value);
+  }
+
+  const filteredTransactions = transactions.filter((transaction) =>transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  function addTransaction(newTransaction) {
+    setTransactions([...transactions, newTransaction])
+  }
+
+
+  return(
+    <div>
+      <Header/>
+      <br />
+      <Search handleSearch={handleSearch} />
+      <br />
+      <Form  addTransaction={addTransaction}/>
+      <br />
+      <Table transactions={filteredTransactions}  />
+    </div>
   )
 }
 
